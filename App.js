@@ -6,6 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
+
 // used with stack navigators:
 import 'react-native-gesture-handler';
 
@@ -21,8 +23,8 @@ const Tab = createBottomTabNavigator();
 function TabNavigator() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Reservation" component={ReservationScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} options={{tabBarIcon: ()=>{return(<MaterialCommunityIcons name="map-search" size={24} color="black" />)}}}/>
+      <Tab.Screen name="Reservation" component={ReservationScreen} options={{tabBarIcon: ()=>{return(<FontAwesome6 name="book-open" size={24} color="black" />)}}}/>
     </Tab.Navigator>
   );
 }
