@@ -11,9 +11,10 @@ import 'react-native-gesture-handler';
 
 // import screens
 import LoginScreen from './screens/LoginScreen';
-
+import WelcomeScreen from './screens/WelcomeScreen';
 import SearchScreen from './screens/SearchScreen';
-import ReservationScreen from './screens/ReservationScreen';
+import ProfileScreen from './screens/Profile';
+import SignupScreen from './screens/SignupScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,7 +23,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Reservation" component={ReservationScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -31,7 +32,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Welcome" component={WelcomeScreen}/>
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUp" component={SignupScreen} />
         <Stack.Screen name="Home" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

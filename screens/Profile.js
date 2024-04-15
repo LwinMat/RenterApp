@@ -1,18 +1,31 @@
-import {View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, StatusBar, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, StatusBar, SafeAreaView, Image} from 'react-native';
 
 import React from 'react';
+import { db, auth } from '../firebaseConfig';
 
-const ReservationScreen = ({navigation}) => {
+const ProfileScreen = ({navigation}) => {
+  console.log(auth.currentUser)
+  //const userName = auth.currentUser?.f_name + " " + auth.currentUser?.l_name
+  const userEmail = auth.currentUser.email
+  const userURL = auth.currentUser?.profile_image
+
     return (
         <SafeAreaView style={[styles.container]}>
-            <Text>Reservation Screen</Text>
+          <Image source={userURL} style={{height: 20, width: 20}}>
+
+          </Image>
+            <Text>
+             </Text>
+            <Text>
+              {userEmail}
+            </Text>
 
             
         </SafeAreaView>
     );
 }
 
-export default ReservationScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
     container: {
