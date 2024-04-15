@@ -51,12 +51,25 @@ const SearchScreen = ({ navigation }) => {
         }
     };
 
+    const generateConfirmationCode = () => {
+        const confirmationCodeLength = 6;
+        const characters = '0123456789';
+        let code = '';
+        for (let i = 0; i < confirmationCodeLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            code += characters[randomIndex];
+        }
+        return code;
+    };
+
     const handleBookNow = async () => {
         if (!selectedBooking) {
             return;
         }
 
         try {
+            const confirmationCode = generateConfirmationCode();
+
             // Attempt to book the selected item
             const docRef = await addDoc(collection(db, 'booking'), {
                 serviceType: selectedBooking.serviceType,
@@ -66,14 +79,15 @@ const SearchScreen = ({ navigation }) => {
                 price: selectedBooking.price,
                 includingParts: selectedBooking.includingParts,
                 includingLabor: selectedBooking.includingLabor,
-                status: 'pending', // Initial status
+                status: 'CONFIRMED', // Initial status
+                confirmationCode: confirmationCode, // Randomly generated confirmation code
             });
 
             console.log("Booking added with ID: ", docRef.id);
 
             Alert.alert(
                 "Booking Requested",
-                "Your booking request has been submitted. You will receive a confirmation after approval.",
+                `Your booking request has been submitted. Confirmation Code: ${confirmationCode}`,
                 [{ text: "OK", onPress: () => console.log("OK Pressed") }]
             );
         } catch (error) {
