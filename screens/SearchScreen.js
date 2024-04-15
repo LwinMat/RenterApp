@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform, StatusBar, SafeAreaView, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar, SafeAreaView, Pressable, Alert, Button } from 'react-native';
 import { db } from '../firebaseConfig';
 import * as Location from 'expo-location';
 import MapView, { Marker, Callout } from "react-native-maps";
@@ -67,6 +67,8 @@ const SearchScreen = ({ navigation }) => {
                 includingParts: selectedBooking.includingParts,
                 includingLabor: selectedBooking.includingLabor,
                 status: 'pending', // Initial status
+                ConfirmationID: Math.floor(Math.random() * 1000000), // Random confirmation ID
+                image: selectedBooking.imageUrl,
             });
 
             console.log("Booking added with ID: ", docRef.id);
