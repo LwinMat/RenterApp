@@ -81,6 +81,7 @@ const SearchScreen = ({ navigation }) => {
                 includingLabor: selectedBooking.includingLabor,
                 status: 'CONFIRMED', // Initial status
                 confirmationCode: confirmationCode, // Randomly generated confirmation code
+                image: selectedBooking.imageUrl,
             });
 
             console.log("Booking added with ID: ", docRef.id);
