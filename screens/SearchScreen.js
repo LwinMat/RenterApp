@@ -80,7 +80,7 @@ const SearchScreen = ({ navigation }) => {
                 includingParts: selectedBooking.includingParts,
                 includingLabor: selectedBooking.includingLabor,
                 status: 'CONFIRMED', // Initial status
-                confirmationCode: confirmationCode, // Randomly generated confirmation code
+                confirmationCode: confirmationCode,
                 image: selectedBooking.imageUrl,
             });
 
