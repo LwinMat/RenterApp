@@ -80,6 +80,10 @@ const SignupScreen = ({ navigation }) => {
                 <Pressable style={styles.Button} onPress={handleRenterSignup}>
                     <Text style={[styles.text, { color: 'white' }]}>Signup</Text>
                 </Pressable>
+
+                <Pressable style={[styles.Button]} onPress={()=>{navigation.navigate('Welcome')} }>
+                        <Text style={[styles.text, {color:'white'}]}>Back</Text>
+                </Pressable>
             </View>
         </SafeAreaView>
     );

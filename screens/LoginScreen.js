@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { db, auth } from '../firebaseConfig'
 
 // TODO: import the specific functions from the service
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 
@@ -16,17 +16,43 @@ const LoginScreen = ({navigation}) =>{
 
     const loginPressed = async () => {
         try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password)
-        console.log(`loginPressed: Who is the currently logged in user? ${auth.currentUser.uid}`)
-       // alert("Login complete!");
-        navigation.navigate('Home');
+            const userCredential = await signInWithEmailAndPassword(auth, email, password)
+            console.log(`loginPressed: Who is the currently logged in user? ${auth.currentUser.uid}`)
+            // alert("Login complete!");
+
+            // Check if the user authentication is equal to users collection id
+            const docRef = doc(db, "users", auth.currentUser.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                if (docSnap.data().is_owner === false) {
+                    console.log("Renter is logged in");
+
+                    // navigate to the renter home screen
+                    navigation.navigate('Home');
+                }
+                // if the user is not a renter, log them out
+                else {
+                    await signOut(auth)
+                    console.log("User is not a renter, logging out");
+                    navigation.navigate('Welcome');
+                }
+            }
+
+
+
+            
+
+
+            //navigation.navigate('Home');
         } catch(error) {
-        console.log(`Error code: ${error.code}`)
-        console.log(`Error message: ${error.message}`)
-        // full error message
-        console.log(error)
+            console.log(`Error code: ${error.code}`)
+            console.log(`Error message: ${error.message}`)
+            // full error message
+            console.log(error)
         }
-        }
+    }
         
 
 
@@ -73,6 +99,10 @@ return(
                         <Text style={[styles.text, {color:'white'}]}>Login</Text>
                     </Pressable>
 
+                    <Pressable style={[styles.Button]} onPress={()=>{navigation.navigate('Welcome')} }>
+                        <Text style={[styles.text, {color:'white'}]}>Back</Text>
+                    </Pressable>
+
                 </View>
 
         </SafeAreaView>
@@ -90,7 +120,7 @@ const styles = StyleSheet.create({
       padding:20,
       paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       paddingLeft: Platform.OS === "android" ? StatusBar.currentWidth : 0,
-      paddingBottom: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      //paddingBottom: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       paddingRight: Platform.OS === "android" ? StatusBar.currentWidth : 0
     },
     headingText: {
