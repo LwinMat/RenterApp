@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { db, auth } from '../firebaseConfig'
 
 // TODO: import the specific functions from the service
-import { collection, addDoc, query, where } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 
