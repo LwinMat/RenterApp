@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { db, auth } from '../firebaseConfig'
 
 // TODO: import the specific functions from the service
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 
@@ -13,46 +13,63 @@ const LoginScreen = ({navigation}) =>{
 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [user, setUser] = useState([]);
 
     const loginPressed = async () => {
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password)
-            console.log(`loginPressed: Who is the currently logged in user? ${auth.currentUser.uid}`)
-            // alert("Login complete!");
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        console.log(`loginPressed: Who is the currently logged in user? ${auth.currentUser.uid}`)
+       //alert("Login complete!");
 
-            // Check if the user authentication is equal to users collection id
-            const docRef = doc(db, "users", auth.currentUser.uid);
-            const docSnap = await getDoc(docRef);
+       try {
+        // Specify which collection and document id to query
+        const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
 
-            if (docSnap.exists()) {
-                console.log("Document data:", docSnap.data());
-                if (docSnap.data().is_owner === false) {
-                    console.log("Renter is logged in");
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot)
+        const resultsFromDB = []
 
-                    // navigate to the renter home screen
-                    navigation.navigate('Home');
-                }
-                // if the user is not a renter, log them out
-                else {
-                    await signOut(auth)
-                    console.log("User is not a renter, logging out");
-                    navigation.navigate('Welcome');
-                }
-            }
+        querySnapshot.forEach((currDoc) => {
+          console.log(currDoc.id, " => ", currDoc.data());
+          const user = {
+              id: currDoc.id,
+              ...currDoc.data()
+          }
+          resultsFromDB.push(user)
+         
+        
+      })
+      
+
+      if(user?.isOwner != true){
+     setUser(resultsFromDB[0])
+      console.log("email is " + user.email)
+      console.log(resultsFromDB[0])
+        navigation.navigate("Home")
+      }
+      else{
+        alert("Not a Renter Account");
+          
+      }
 
 
-
-            
-
-
-            //navigation.navigate('Home');
+        // use the .exists() function to check if the document 
+        // could be found
+        
+        
+     } catch (err) {
+        console.log(err)
+     }
+     
+     
+       
         } catch(error) {
-            console.log(`Error code: ${error.code}`)
-            console.log(`Error message: ${error.message}`)
-            // full error message
-            console.log(error)
+        console.log(`Error code: ${error.code}`)
+        console.log(`Error message: ${error.message}`)
+        alert(error)// full error message
+        console.log(error)
         }
-    }
+        }
         
 
 
@@ -99,10 +116,6 @@ return(
                         <Text style={[styles.text, {color:'white'}]}>Login</Text>
                     </Pressable>
 
-                    <Pressable style={[styles.Button]} onPress={()=>{navigation.navigate('Welcome')} }>
-                        <Text style={[styles.text, {color:'white'}]}>Back</Text>
-                    </Pressable>
-
                 </View>
 
         </SafeAreaView>
@@ -120,7 +133,7 @@ const styles = StyleSheet.create({
       padding:20,
       paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       paddingLeft: Platform.OS === "android" ? StatusBar.currentWidth : 0,
-      //paddingBottom: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      paddingBottom: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       paddingRight: Platform.OS === "android" ? StatusBar.currentWidth : 0
     },
     headingText: {
