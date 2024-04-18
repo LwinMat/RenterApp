@@ -43,7 +43,7 @@ const LoginScreen = ({navigation}) =>{
       console.log("email is " + user.email)
       console.log(resultsFromDB[0])
 
-      if(user?.is_owner != true){
+      if(user?.is_owner == false){
 
         navigation.navigate("Home")
       }
