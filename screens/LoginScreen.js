@@ -39,16 +39,17 @@ const LoginScreen = ({navigation}) =>{
          
         
       })
-      
-
-      if(user?.isOwner != true){
-     setUser(resultsFromDB[0])
+           setUser(resultsFromDB[0])
       console.log("email is " + user.email)
       console.log(resultsFromDB[0])
+
+      if(user?.isOwner == false){
+
         navigation.navigate("Home")
       }
       else{
         alert("Not a Renter Account");
+          setUser();
           
       }
 
