@@ -23,7 +23,7 @@ const LoginScreen = ({navigation}) =>{
 
        try {
         // Specify which collection and document id to query
-        const q = query(collection(db, "users"), where("email", "==", auth.currentUser.email));
+        const q = query(collection(db, "users"), where("u_email", "==", auth.currentUser.email));
 
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot)
